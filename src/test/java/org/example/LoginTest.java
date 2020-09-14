@@ -5,12 +5,15 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleContains;
@@ -54,40 +57,62 @@ public class LoginTest {
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
         // Go through the left menu items
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Appearence']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Catalog']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Countries']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Currencies']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Customers']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Geo Zones']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Languages']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Modules']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Orders']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Pages']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Reports']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Settings']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Slides']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Tax']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Translations']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='Users']")).click();
-        driver.findElement(By.xpath("//h1"));
-        driver.findElement(By.xpath("//ul[@id='box-apps-menu']//*[.='vQmods']")).click();
-        driver.findElement(By.xpath("//h1"));
+        String[] top_name_list = {
+                "Appearence",
+                "Catalog",
+                "Countries",
+                "Currencies",
+                "Customers",
+                "Geo Zones",
+                "Languages",
+                "Modules",
+                "Orders",
+                "Pages",
+                "Reports",
+                "Settings",
+                "Slides",
+                "Tax",
+                "Translations",
+                "Users",
+                "vQmods"
+        };
+        String[][] sub_name_list = {
+                {"Template", "Logotype"},
+                {"Catalog", "Product Groups", "Option Groups", "Manufacturers", "Suppliers", "Delivery Statuses", "Sold Out Statuses", "Quantity Units", "CSV Import/Export"},
+                {},
+                {},
+                {"Customers", "CSV Import/Export", "Newsletter"},
+                {},
+                {"Languages", "Storage Encoding"},
+                {"Background Jobs", "Customer", "Shipping", "Payment", "Order Total", "Order Success", "Order Action"},
+                {"Orders", "Order Statuses"},
+                {},
+                {"Monthly Sales", "Most Sold Products", "Most Shopping Customers"},
+                {"Store Info", "Defaults", "General", "Listings", "Images", "Checkout", "Advanced", "Security"},
+                {},
+                {"Tax Classes", "Tax Rates"},
+                {"Search Translations", "Scan Files", "CSV Import/Export"},
+                {},
+                {"vQmods"}
+        };
+        String top_xpath;
+        String sub_xpath;
+        WebElement top_item;
+        for(int i = 0, n = top_name_list.length; i < n; ++i)
+        {
+            // top-item
+            top_xpath = "//ul[@id='box-apps-menu']//li[.//*[.='" + top_name_list[i] + "']]";
+            driver.findElement(By.xpath(top_xpath)).click();
+            driver.findElement(By.xpath("//h1"));
+            for(int j = 0, m = sub_name_list[i].length; j < m; ++j)
+            {
+                // sub-item
+                sub_xpath = ".//li[.//*[.='" + sub_name_list[i][j] + "']]";
+                top_item = driver.findElement(By.xpath(top_xpath));
+                top_item.findElement(By.xpath(sub_xpath)).click();
+                driver.findElement(By.xpath("//h1"));
+            }
+        }
     }
 
     @After
