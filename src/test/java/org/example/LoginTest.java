@@ -48,6 +48,18 @@ public class LoginTest {
         driver.findElement(By.name("login")).click();
     }
 
+
+
+    List<WebElement> getTopList() {
+        String top_xpath = "//ul[@id='box-apps-menu']/li"; // top items only: "/li"
+        return driver.findElements(By.xpath(top_xpath));
+    }
+
+    List<WebElement> getSubList(WebElement top_item) {
+        String sub_xpath = ".//li";
+        return top_item.findElements(By.xpath(sub_xpath));
+    }
+
     @Test
     public void findElementTest() {
         // Open admin page
@@ -57,59 +69,17 @@ public class LoginTest {
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
         // Go through the left menu items
-        String[] top_name_list = {
-                "Appearence",
-                "Catalog",
-                "Countries",
-                "Currencies",
-                "Customers",
-                "Geo Zones",
-                "Languages",
-                "Modules",
-                "Orders",
-                "Pages",
-                "Reports",
-                "Settings",
-                "Slides",
-                "Tax",
-                "Translations",
-                "Users",
-                "vQmods"
-        };
-        String[][] sub_name_list = {
-                {"Template", "Logotype"},
-                {"Catalog", "Product Groups", "Option Groups", "Manufacturers", "Suppliers", "Delivery Statuses", "Sold Out Statuses", "Quantity Units", "CSV Import/Export"},
-                {},
-                {},
-                {"Customers", "CSV Import/Export", "Newsletter"},
-                {},
-                {"Languages", "Storage Encoding"},
-                {"Background Jobs", "Customer", "Shipping", "Payment", "Order Total", "Order Success", "Order Action"},
-                {"Orders", "Order Statuses"},
-                {},
-                {"Monthly Sales", "Most Sold Products", "Most Shopping Customers"},
-                {"Store Info", "Defaults", "General", "Listings", "Images", "Checkout", "Advanced", "Security"},
-                {},
-                {"Tax Classes", "Tax Rates"},
-                {"Search Translations", "Scan Files", "CSV Import/Export"},
-                {},
-                {"vQmods"}
-        };
-        String top_xpath;
-        String sub_xpath;
-        WebElement top_item;
-        for(int i = 0, n = top_name_list.length; i < n; ++i)
+        for(int i = 0, n = getTopList().size(); i < n; ++i)
         {
             // top-item
-            top_xpath = "//ul[@id='box-apps-menu']//li[.//*[.='" + top_name_list[i] + "']]";
-            driver.findElement(By.xpath(top_xpath)).click();
+            getTopList().get(i).click();
             driver.findElement(By.xpath("//h1"));
-            for(int j = 0, m = sub_name_list[i].length; j < m; ++j)
+            WebElement top_item = getTopList().get(i);
+            for(int j = 0, m = getSubList(top_item).size(); j < m; ++j)
             {
                 // sub-item
-                sub_xpath = ".//li[.//*[.='" + sub_name_list[i][j] + "']]";
-                top_item = driver.findElement(By.xpath(top_xpath));
-                top_item.findElement(By.xpath(sub_xpath)).click();
+                top_item = getTopList().get(i);
+                getSubList(top_item).get(j).click();
                 driver.findElement(By.xpath("//h1"));
             }
         }
