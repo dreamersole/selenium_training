@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Dimension;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -46,8 +47,8 @@ public class ProductPageTest {
         // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
         // - action_cost_font_is_red
-        // - normal_cost_font_size
-        // - action_cost_font_size
+        Dimension main_regular_price_font_size = product.findElement(By.cssSelector("s.regular-price")).getSize();
+        Dimension main_campaign_price_font_size = product.findElement(By.cssSelector("strong.campaign-price")).getSize();
         // TODO
         // Open the campaigns first found product page
         product.click();
@@ -59,13 +60,16 @@ public class ProductPageTest {
         // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
         // - action_cost_font_is_red
-        // - normal_cost_font_size
-        // - action_cost_font_size
+        Dimension prod_regular_price_font_size = driver.findElement(By.cssSelector("div#box-product s.regular-price")).getSize();
+        Dimension prod_campaign_price_font_size = driver.findElement(By.cssSelector("div#box-product strong.campaign-price")).getSize();
         // TODO
         // Verify all info
         assert main_product_name.equals(prod_product_name);
         assert main_campaign_price.equals(prod_campaign_price);
         assert main_regular_price.equals(prod_regular_price);
+        // TODO
+        assert main_campaign_price_font_size.height > main_regular_price_font_size.height;
+        assert prod_campaign_price_font_size.height > prod_regular_price_font_size.height;
         // TODO
     }
 
