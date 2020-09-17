@@ -39,9 +39,9 @@ public class ProductPageTest {
         // Get the campaigns first found product
         WebElement product = driver.findElement(By.cssSelector("div#box-campaigns li.product"));
         // Read the product info from the main page:
-        // - product_name
-        // - normal_cost
-        // - action_cost
+        String main_product_name = product.findElement(By.cssSelector("div.name")).getText();
+        String main_regular_price = product.findElement(By.cssSelector("s.regular-price")).getText();
+        String main_campaign_price = product.findElement(By.cssSelector("strong.campaign-price")).getText();
         // - normal_cost_font_is_crossed
         // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
@@ -52,9 +52,9 @@ public class ProductPageTest {
         // Open the campaigns first found product page
         product.click();
         // Read the product info from the product page:
-        // - product_name
-        // - normal_cost
-        // - action_cost
+        String prod_product_name = driver.findElement(By.cssSelector("div#box-product h1.title")).getText();
+        String prod_regular_price = driver.findElement(By.cssSelector("div#box-product s.regular-price")).getText();
+        String prod_campaign_price = driver.findElement(By.cssSelector("div#box-product strong.campaign-price")).getText();
         // - normal_cost_font_is_crossed
         // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
@@ -63,6 +63,9 @@ public class ProductPageTest {
         // - action_cost_font_size
         // TODO
         // Verify all info
+        assert main_product_name.equals(prod_product_name);
+        assert main_campaign_price.equals(prod_campaign_price);
+        assert main_regular_price.equals(prod_regular_price);
         // TODO
     }
 
