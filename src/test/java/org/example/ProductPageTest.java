@@ -9,6 +9,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.Color;
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
 
@@ -43,10 +44,10 @@ public class ProductPageTest {
         String main_product_name = product.findElement(By.cssSelector("div.name")).getText();
         String main_regular_price = product.findElement(By.cssSelector("s.regular-price")).getText();
         String main_campaign_price = product.findElement(By.cssSelector("strong.campaign-price")).getText();
+        String main_regular_price_font_color = product.findElement(By.cssSelector("s.regular-price")).getCssValue("color");
+        String main_campaign_price_font_color = product.findElement(By.cssSelector("strong.campaign-price")).getCssValue("color");
         // - normal_cost_font_is_crossed
-        // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
-        // - action_cost_font_is_red
         Dimension main_regular_price_font_size = product.findElement(By.cssSelector("s.regular-price")).getSize();
         Dimension main_campaign_price_font_size = product.findElement(By.cssSelector("strong.campaign-price")).getSize();
         // TODO
@@ -56,10 +57,10 @@ public class ProductPageTest {
         String prod_product_name = driver.findElement(By.cssSelector("div#box-product h1.title")).getText();
         String prod_regular_price = driver.findElement(By.cssSelector("div#box-product s.regular-price")).getText();
         String prod_campaign_price = driver.findElement(By.cssSelector("div#box-product strong.campaign-price")).getText();
+        String prod_regular_price_font_color = driver.findElement(By.cssSelector("div#box-product s.regular-price")).getCssValue("color");
+        String prod_campaign_price_font_color = driver.findElement(By.cssSelector("div#box-product strong.campaign-price")).getCssValue("color");
         // - normal_cost_font_is_crossed
-        // - normal_cost_font_is_grey
         // - action_cost_font_is_bold
-        // - action_cost_font_is_red
         Dimension prod_regular_price_font_size = driver.findElement(By.cssSelector("div#box-product s.regular-price")).getSize();
         Dimension prod_campaign_price_font_size = driver.findElement(By.cssSelector("div#box-product strong.campaign-price")).getSize();
         // TODO
@@ -67,14 +68,37 @@ public class ProductPageTest {
         assert main_product_name.equals(prod_product_name);
         assert main_campaign_price.equals(prod_campaign_price);
         assert main_regular_price.equals(prod_regular_price);
+        assert isRed(main_campaign_price_font_color);
+        assert isGrey(main_regular_price_font_color);
+        assert isRed(prod_campaign_price_font_color);
+        assert isGrey(prod_regular_price_font_color);
         // TODO
         assert main_campaign_price_font_size.height > main_regular_price_font_size.height;
         assert prod_campaign_price_font_size.height > prod_regular_price_font_size.height;
-        // TODO
     }
 
     private void openMainPage() {
         driver.get("http://localhost/litecart/");
+    }
+
+    boolean isRed(String color_string) {
+        Color color = Color.fromString(color_string);
+        java.awt.Color c = color.getColor();
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
+        int a = c.getAlpha();
+        return r > 0 && g == 0 && b == 0;
+    }
+
+    boolean isGrey(String color_string) {
+        Color color = Color.fromString(color_string);
+        java.awt.Color c = color.getColor();
+        int r = c.getRed();
+        int g = c.getGreen();
+        int b = c.getBlue();
+        int a = c.getAlpha();
+        return r == g && g == b && b > 0;
     }
 
     @After
