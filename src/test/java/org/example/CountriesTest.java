@@ -8,7 +8,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+//import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 public class CountriesTest {
 
     public WebDriver driver;
-    public WebDriverWait wait;
+    //public WebDriverWait wait;
 
     @Before
     public void start() {
@@ -30,10 +30,12 @@ public class CountriesTest {
     public void countriesTest() {
         openAdminPageAndLogIn();
 
-        // Check countries sorting
+        // Step A - Check countries sorting
         openCountriesPage();
         List<WebElement> country_table_row_list = getCountryTableRowList();
+        // Get country name and country zone count lists
         List<String> country_name_list = new ArrayList<>();
+        // NOTE: country_zone_count_list is used at the Step B
         List<String> country_zone_count_list = new ArrayList<>();
         for (WebElement element : country_table_row_list) {
             String name = element.findElements(By.xpath(".//td")).get(4).getText();
@@ -41,11 +43,13 @@ public class CountriesTest {
             String zone_count = element.findElements(By.xpath(".//td")).get(5).getText();
             country_zone_count_list.add(zone_count);
         }
+        // Check sorting
         List<String> country_sorted_name_list = new ArrayList<>(country_name_list);
         country_sorted_name_list.sort(String::compareTo);
         assert country_name_list.equals(country_sorted_name_list);
 
-        // Check country geo zones sorting
+        // Step B - Check country geo zones sorting
+        // Iterate through the country list
         for(int i = 0, n = country_zone_count_list.size(); i < n; ++i)
         {
             // Skip countries without geo zones
@@ -53,6 +57,7 @@ public class CountriesTest {
                 continue;
             }
 
+            // Check countries with geo zones
             openCountriesPage();
             // Open geo zones subpage for the i-th country:
             // - get table row
@@ -62,9 +67,9 @@ public class CountriesTest {
             // - get link placeholder
             WebElement link = field.findElement(By.xpath("./a"));
             // - open link
+            link.click();
             // NOTE: Obviously, these above code lines can be merged in single one,
             //       but separated lines are more understandable and more debuggable
-            link.click();
             // Check geo zones sorting
             List<String> geo_zone_name_list = getGeoZoneNameList();
             assert geo_zone_name_list.size() > 0;
@@ -80,8 +85,6 @@ public class CountriesTest {
         driver.findElement(By.name("username")).sendKeys("admin");
         driver.findElement(By.name("password")).sendKeys("admin");
         driver.findElement(By.name("login")).click();
-//        // Check for header
-//        driver.findElement(By.xpath("//h1"));
     }
 
     private void openCountriesPage() {
