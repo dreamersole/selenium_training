@@ -10,10 +10,9 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
 
 public class ProductPageTest {
-    //public WebDriver driver;
+    public WebDriver driver; // WARNING: NOT thread-safe yet
     //public WebDriverWait wait;
 
     @Before
@@ -25,20 +24,18 @@ public class ProductPageTest {
 
     @Test
     public void productPageFirefoxTest() {
-        WebDriver driver = new FirefoxDriver();
-        productPageTestInternal(driver);
-        driver.quit();
+        driver = new FirefoxDriver();
+        productPageTestInternal();
     }
 
     @Test
     public void productPageChromeTest() {
-        WebDriver driver = new ChromeDriver();
-        productPageTestInternal(driver);
-        driver.quit();
+        driver = new ChromeDriver();
+        productPageTestInternal();
     }
 
-    private void productPageTestInternal(WebDriver driver) {
-        openMainPage(driver);
+    private void productPageTestInternal() {
+        openMainPage();
         // Get the campaigns first found product
         WebElement product = driver.findElement(By.cssSelector("div#box-campaigns li.product"));
         // Read the product info from the main page:
@@ -69,13 +66,13 @@ public class ProductPageTest {
         // TODO
     }
 
-    private void openMainPage(WebDriver driver) {
+    private void openMainPage() {
         driver.get("http://localhost/litecart/");
     }
 
     @After
     public void stop() {
-        //driver.quit();
-        //driver = null;
+        driver.quit();
+        driver = null;
     }
 }
