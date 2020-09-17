@@ -21,7 +21,6 @@ public class CountriesTest {
 
     @Before
     public void start() {
-        // Firefox driver
         FirefoxOptions firefox_options = new FirefoxOptions();
         driver = new FirefoxDriver(firefox_options);
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
@@ -35,35 +34,40 @@ public class CountriesTest {
         openCountriesPage();
         List<WebElement> country_table_row_list = getCountryTableRowList();
         List<String> country_name_list = new ArrayList<>();
+        List<String> country_zone_count_list = new ArrayList<>();
         for (WebElement element : country_table_row_list) {
             String name = element.findElements(By.xpath(".//td")).get(4).getText();
             country_name_list.add(name);
+            String zone_count = element.findElements(By.xpath(".//td")).get(5).getText();
+            country_zone_count_list.add(zone_count);
         }
         List<String> country_sorted_name_list = new ArrayList<>(country_name_list);
         country_sorted_name_list.sort(String::compareTo);
         assert country_name_list.equals(country_sorted_name_list);
 
         // Check country geo zones sorting
-        boolean open_countries_page_required = true;
-        for(int i = 0, n = getCountryTableRowList().size(); i < n; ++i)
+        for(int i = 0, n = country_zone_count_list.size(); i < n; ++i)
         {
-            // Go to countries page if required
-            if(open_countries_page_required) {
-                openCountriesPage();
-                open_countries_page_required = false;
-            }
-
             // Skip countries without geo zones
-            List<WebElement> table_row_item_list = getCountryTableRowList().get(i).findElements(By.xpath(".//td"));
-            String count_txt_value = table_row_item_list.get(5).getText();
-            if (count_txt_value.equals("0")) {
+            if (country_zone_count_list.get(i).equals("0")) {
                 continue;
             }
 
+            openCountriesPage();
+            // Open geo zones subpage for the i-th country:
+            // - get table row
+            WebElement row = getCountryTableRowList().get(i);
+            // - get row field
+            WebElement field = row.findElements(By.xpath(".//td")).get(4);
+            // - get link placeholder
+            WebElement link = field.findElement(By.xpath("./a"));
+            // - open link
+            // NOTE: Obviously, these above code lines can be merged in single one,
+            //       but separated lines are more understandable and more debuggable
+            link.click();
             // Check geo zones sorting
-            open_countries_page_required = true;
-            table_row_item_list.get(4).click();
             List<String> geo_zone_name_list = getGeoZoneNameList();
+            assert geo_zone_name_list.size() > 0;
             List<String> geo_zone_name_sorted_list = new ArrayList<>(geo_zone_name_list);
             geo_zone_name_sorted_list.sort(String::compareTo);
             assert geo_zone_name_list.equals(geo_zone_name_sorted_list);
@@ -93,7 +97,7 @@ public class CountriesTest {
 
     private List<String> getGeoZoneNameList() {
         List<String> geo_zone_name_list = new ArrayList<>();
-        String xpath = "//table[@id='table-zones']//tr//td[3]";
+        String xpath = "//table[@id='table-zones']//tr//td[3][./input[@type='hidden']]";
         List<WebElement> geo_zone_list = driver.findElements(By.xpath(xpath));
         for (WebElement webElement : geo_zone_list) {
             String name = webElement.getText();
