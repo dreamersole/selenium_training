@@ -62,8 +62,8 @@ public class ProductPageTest {
         product.click();
         // Read the product info from the product page:
         String prod_product_name = driver.findElement(By.cssSelector("div#box-product h1.title")).getText();
-        WebElement prod_regular_price_web_element = product.findElement(By.cssSelector("div#box-product .price-wrapper s.regular-price"));
-        WebElement prod_campaign_price_web_element = product.findElement(By.cssSelector("div#box-product .price-wrapper strong.campaign-price"));
+        WebElement prod_regular_price_web_element = driver.findElement(By.cssSelector("div#box-product .price-wrapper s.regular-price"));
+        WebElement prod_campaign_price_web_element = driver.findElement(By.cssSelector("div#box-product .price-wrapper strong.campaign-price"));
         String prod_regular_price = prod_regular_price_web_element.getText();
         String prod_campaign_price = prod_campaign_price_web_element.getText();
         // NOTE: for the product page prices
