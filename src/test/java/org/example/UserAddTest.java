@@ -9,11 +9,10 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.Color;
-
 //import org.openqa.selenium.support.ui.WebDriverWait;
 
 
-public class ProductPageTest {
+public class UserAddTest {
     public WebDriver driver; // WARNING: NOT thread-safe yet
     //public WebDriverWait wait;
 
@@ -25,18 +24,18 @@ public class ProductPageTest {
     }
 
     @Test
-    public void productPageFirefoxTest() {
+    public void firefoxTest() {
         driver = new FirefoxDriver();
-        productPageTestInternal();
+        testInternal();
     }
 
     @Test
-    public void productPageChromeTest() {
+    public void chromeTest() {
         driver = new ChromeDriver();
-        productPageTestInternal();
+        testInternal();
     }
 
-    private void productPageTestInternal() {
+    private void testInternal() {
         // MAIN PAGE
         openMainPage();
         // Get the campaigns first found product
