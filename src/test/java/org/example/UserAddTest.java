@@ -49,18 +49,20 @@ public class UserAddTest {
         fillFieldByName("city", "Test City");
         // TODO: Country
         // TODO: State
-        fillFieldByName("email", getRandomEmail());
+        final String email = getRandomEmail();
+        final String password = "secret";
+        fillFieldByName("email", email);
         fillFieldByName("phone", "+1234567890");
-        fillFieldByName("password", "secret");
-        fillFieldByName("confirmed_password", "secret");
-        // TODO
+        fillFieldByName("password", password);
+        fillFieldByName("confirmed_password", password);
         // Submit (and implicit login)
-        // TODO
+        driver.findElement(By.cssSelector("button[name='create_account']"));
         // Logout
-        // TODO
+        logout();
         // Login #2
-        // TODO
+        login(email, password);
         // Logout #2
+        logout();
     }
 
     private void openMainPage() {
@@ -89,6 +91,14 @@ public class UserAddTest {
             stringBuilder.append(charsB.charAt(random.nextInt(charsB.length())));
         }
         return stringBuilder.toString();
+    }
+
+    private void login(String email, String password) {
+        // TODO
+    }
+
+    private void logout() {
+        driver.findElement(By.linkText("Logout")).click();
     }
 
     @After
