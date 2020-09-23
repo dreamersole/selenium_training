@@ -94,7 +94,9 @@ public class UserAddTest {
     }
 
     private void login(String email, String password) {
-        // TODO
+        driver.findElement(By.name("email")).sendKeys(email);
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.cssSelector("button[name='login']")).click();
     }
 
     private void logout() {
