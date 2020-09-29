@@ -39,7 +39,7 @@ public class ProductAddTest {
     public void chromeTest() {
         driver = new ChromeDriver();
         driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-        date_formatter = DateTimeFormatter.ofPattern("ddMMuuuu");
+        date_formatter = DateTimeFormatter.ofPattern("dd.MM.uuuu");
         testInternal();
     }
 
@@ -90,9 +90,34 @@ public class ProductAddTest {
         fillDateFieldByName("date_valid_to", product_date_valid_to_str);
         // - Information product
         driver.findElement(By.xpath("//li/a[.='Information']")).click();
-        // TODO
+        // -- Manufacturer
+        driver.findElement(By.xpath("//select[@name='manufacturer_id']")).click();
+        driver.findElement(By.xpath("//select[@name='manufacturer_id']/option[.='ACME Corp.']")).click();
+        // -- Supplier
+        // keep as is
+        // -- Keywords
+        fillFieldByName("keywords", "stick magic 5+ 18-");
+        // -- Short Description
+        fillFieldByName("short_description[en]", "Standard magic stick for fun");
+        // -- Description
+        fillFieldByXPath("//textarea[@name='description[en]']/../div[contains(@class,'trumbowyg-editor')]",
+                "Standard magic stick is intended for children (5-18) who believe in magic.\n" +
+                        "It may help in games, drawing, and other fun");
+        // -- Head Title
+        fillFieldByName("head_title[en]", "Magic Stick");
+        // -- Meta Description
+        fillFieldByName("meta_description[en]", "Magic Stick");
         // - Prices subpage
         driver.findElement(By.xpath("//li/a[.='Prices']")).click();
+        // -- Purchase Price - value
+        // TODO
+        // -- Purchase Price - units
+        // TODO
+        // -- Tax Class
+        // keep as is
+        // -- Price - USD (x.xx)
+        // TODO
+        // -- Price - EUR (y.yy)
         // TODO
         // Submit
         driver.findElement(By.xpath("//button[@name='save']")).click();
@@ -115,6 +140,12 @@ public class ProductAddTest {
         driver.findElement(By.name(name)).click();
         driver.findElement(By.name(name)).clear();
         driver.findElement(By.name(name)).sendKeys(value);
+    }
+
+    private void fillFieldByXPath(String xpath, String value) {
+        driver.findElement(By.xpath(name)).click();
+        driver.findElement(By.xpath(name)).clear();
+        driver.findElement(By.xpath(name)).sendKeys(value);
     }
 
     private void fillDateFieldByName(String name, String value) {
