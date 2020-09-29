@@ -79,6 +79,7 @@ public class ProductAddTest {
         // -- select sold out status
         // keep as is
         // -- upload images
+        fillFieldByName("new_images[]", "");
         // TODO
         // -- date valid from
         LocalDate product_date_valid_from = LocalDate.of(2001, 01, 01);
@@ -110,15 +111,16 @@ public class ProductAddTest {
         // - Prices subpage
         driver.findElement(By.xpath("//li/a[.='Prices']")).click();
         // -- Purchase Price - value
-        // TODO
+        fillFieldByName("purchase_price", "100.00");
         // -- Purchase Price - units
-        // TODO
+        driver.findElement(By.xpath("//select[@name='purchase_price_currency_code']")).click();
+        driver.findElement(By.xpath("//select[@name='purchase_price_currency_code']/option[.='Euros']")).click();
         // -- Tax Class
         // keep as is
         // -- Price - USD (x.xx)
-        // TODO
+        fillFieldByName("prices[USD]", "140.00");
         // -- Price - EUR (y.yy)
-        // TODO
+        fillFieldByName("prices[EUR]", "120.00");
         // Submit
         driver.findElement(By.xpath("//button[@name='save']")).click();
         // Go to Catalog and check the product existing
@@ -143,9 +145,9 @@ public class ProductAddTest {
     }
 
     private void fillFieldByXPath(String xpath, String value) {
-        driver.findElement(By.xpath(name)).click();
-        driver.findElement(By.xpath(name)).clear();
-        driver.findElement(By.xpath(name)).sendKeys(value);
+        driver.findElement(By.xpath(xpath)).click();
+        driver.findElement(By.xpath(xpath)).clear();
+        driver.findElement(By.xpath(xpath)).sendKeys(value);
     }
 
     private void fillDateFieldByName(String name, String value) {
